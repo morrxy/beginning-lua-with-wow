@@ -1,0 +1,9 @@
+{
+  "name": "beginning-lua-with-wow",
+  "version": "0.0.1",
+  "devDependencies": {
+    "grunt": "^0.4.4",
+    "grunt-sync": "0.0.5",
+    "grunt-contrib-watch": "^0.6.1"
+  }
+}

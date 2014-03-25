@@ -1,0 +1,5 @@
+## Interface: 54718019
+## Title: Hello, World!
+## Title-deDE: Hallo, Welt!
+## Notes: The best "Hello, World!" addon!
+HelloWorld.lua
