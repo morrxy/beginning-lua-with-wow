@@ -14,7 +14,7 @@ local function showTooltip(self, linkData)
   end
 end
 
-local function hideTooltip()
+local function hideTooltip(...)
   GameTooltip:Hide()
 end
 

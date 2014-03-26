@@ -1,9 +1,14 @@
 module.exports = function(grunt) {
 
-  var ADDONS_DIR = '/Applications/World\ of\ Warcraft/Interface/AddOns/';
+  // for my mac
+  // var ADDONS_DIR = '/Applications/World\ of\ Warcraft/Interface/AddOns/';
+
+  // for my workpc
+  var ADDONS_DIR = 'm:\\World of Warcraft\\Interface\\AddOns\\';
 
   // Project configuration.
   grunt.initConfig({
+
     sync: {
       HelloWorld: {
         files: [{
@@ -19,8 +24,8 @@ module.exports = function(grunt) {
           dest: ADDONS_DIR + 'ChatlinkTooltips'
         }]
       }
-
     },
+
     watch: {
       HelloWorld: {
         files: 'HelloWorld/**/*.*',
@@ -30,8 +35,8 @@ module.exports = function(grunt) {
         files: 'ChatlinkTooltips/**/*.*',
         tasks: ['sync:ChatlinkTooltips']
       }
-
     }
+
   });
 
   // Load the plugin that provides the "uglify" task.
