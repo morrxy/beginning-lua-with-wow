@@ -1,10 +1,10 @@
 module.exports = function(grunt) {
 
   // for my mac
-  // var ADDONS_DIR = '/Applications/World\ of\ Warcraft/Interface/AddOns/';
+  var ADDONS_DIR = '/Applications/World\ of\ Warcraft/Interface/AddOns/';
 
   // for my workpc
-  var ADDONS_DIR = 'm:\\World of Warcraft\\Interface\\AddOns\\';
+  // var ADDONS_DIR = 'm:\\World of Warcraft\\Interface\\AddOns\\';
 
   // Project configuration.
   grunt.initConfig({
@@ -23,7 +23,15 @@ module.exports = function(grunt) {
           src: '**',
           dest: ADDONS_DIR + 'ChatlinkTooltips'
         }]
+      },
+      SimpleTimingLib: {
+        files: [{
+          cwd: 'SimpleTimingLib',
+          src: '**',
+          dest: ADDONS_DIR + 'SimpleTimingLib'
+        }]
       }
+
     },
 
     watch: {
@@ -34,6 +42,10 @@ module.exports = function(grunt) {
       ChatlinkTooltips: {
         files: 'ChatlinkTooltips/**/*.*',
         tasks: ['sync:ChatlinkTooltips']
+      },
+      SimpleTimingLib: {
+        files: 'SimpleTimingLib/**/*.*',
+        tasks: ['sync:SimpleTimingLib']
       }
     }
 
