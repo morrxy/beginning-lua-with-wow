@@ -1,10 +1,18 @@
 module.exports = function(grunt) {
 
-  // for my mac
-  var ADDONS_DIR = '/Applications/World\ of\ Warcraft/Interface/AddOns/';
+  // addon path of my mac
+  var ADDONS_DIR_MAC = '/Applications/World\ of\ Warcraft/Interface/AddOns/';
 
-  // for my workpc
-  // var ADDONS_DIR = 'm:\\World of Warcraft\\Interface\\AddOns\\';
+  // addon path of my workpc
+  var ADDONS_DIR_PC = 'm:\\World of Warcraft\\Interface\\AddOns\\';
+
+  // choose addon path
+  var ADDONS_DIR;
+  if (grunt.file.exists(ADDONS_DIR_PC)) {
+    ADDONS_DIR = ADDONS_DIR_PC;
+  } else if (grunt.file.exists(ADDONS_DIR_MAC)) {
+    ADDONS_DIR = ADDONS_DIR_MAC;
+  }
 
   // Project configuration.
   grunt.initConfig({
