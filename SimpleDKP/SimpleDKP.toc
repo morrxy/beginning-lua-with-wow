@@ -1,0 +1,5 @@
+## Interface: 50400
+## Title: SimpleDKP
+## SavedVariables: SimpleDKP_Channel, SimpleDKP_AuctionTime, SimpleDKP_MinBid, SimpleDKP_ACL
+## Dependencies: SimpleTimingLib
+SimpleDKP.lua
