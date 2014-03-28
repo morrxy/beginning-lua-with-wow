@@ -1,7 +1,32 @@
+// grunt.file.expand([options, ] patterns)
+// isDirectory
+// grunt.file.expand('isDirectory', '!node_modules')
+
+// grunt.registerTask("your-task-name", "your description", function() {
+
+//   // read all subdirectories from your modules folder
+//   grunt.file.expand("./modules/*").forEach(function (dir) {
+
+//     // get the current concat config
+//     var concat = grunt.config.get('concat') || {};
+
+//     // set the config for this modulename-directory
+//     concat[dir] = {
+//      src: ['/modules/' + dir + '/js/*.js', '!/modules/' + dir + '/js/compiled.js'],
+//      dest: '/modules/' + dir + '/js/compiled.js'
+//     }
+
+//     // save the new concat config
+//     grunt config.set('concat', concat);
+//   });
+//   // when finished run the concatinations
+//   grunt.task.run('concat');
+// });
+
 module.exports = function(grunt) {
 
   // addon path of my mac
-  var ADDONS_DIR_MAC = '/Applications/World of Warcraft/Interface/AddOns/';
+  var ADDONS_DIR_MAC = '/Applications/World\ of\ Warcraft/Interface/AddOns/';
 
   // addon path of my workpc
   var ADDONS_DIR_PC = 'm:\\World of Warcraft\\Interface\\AddOns\\';
@@ -65,5 +90,10 @@ module.exports = function(grunt) {
 
   // Default task(s).
   grunt.registerTask('default', ['watch']);
+
+  // dynamic mapping sync
+  grunt.registerTask('sync-addons', function() {
+
+  });
 
 };
