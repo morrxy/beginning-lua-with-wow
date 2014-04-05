@@ -11,7 +11,6 @@ SimpleDKP_ACL = {} -- the access control list
 local startAuction, endAuction, placeBid, cancelAuction, onEvent
 
 do
-
   local auctionAlreadyRunning = "There is already an auction running! (on %s)"
   local startingAuction = prefix .. "Starting auction for item %s, please place your bids by whisper me. Remaining time: %d seconds."
   local auctionProgress = prefix .. "Time remaining for %s: %d seconds."
@@ -44,11 +43,9 @@ do
       SimpleTimingLib_Schedule(SimpleDKP_AuctionTime, endAuction)
     end
   end
-
 end
 
 do
-
   local noBids = prefix .. "No one wants to have %s :("
   local wonItemFor = prefix .. "%s won %s for %d DKP"
   local pleaseRoll = prefix .. "%s bid %d DKP on %s, please roll!"
@@ -76,13 +73,129 @@ do
         if bids[i].bid ~= bids[1].bid then -- found a player who bid less --> break
           break
         else -- append the players name to the string
-
+          if bids[i + 2] and bids[i + 2].bid = bids[i].bid then
+            str = str .. bids[i].name .. ", " -- use a comma if this is not the last
+          else
+            str = str .. bids[i].name .. " and " -- this is the last player
+          end
         end
       end
+      str = str:sub(0, -6) -- cut off the end of the string as the loop generates a
+      -- string that is too long
+      SendChatMessage(pleaseRoll:format(str, bids[1].bid, currentItem), SimpleDKP_Channel)
+    end
+    currentItem = nil -- set currentItem to nil as there is no longer an ongonging auction
+    table.wipe(bids) -- clear the table that holds the bids
+  end
+end
+
+do
+  local oldBidDetectd = prefix .. "Your old bid was %d DKP, you new bid is %d DKP."
+  local bidPlaced = prefix .. "Your bid of %d DKP has been placed!"
+  local lowBid = prefix .. "The minimun bid is %d DKP."
+
+  function onEvent(self, event, msg, sender)
+    if event == "CHAT_MSG_WHISPER" and currentItem and tonumber(msg) then
+      local bid = tonumber(msg)
+      if bid < SimpleDKP_MinBid then
+        SendChatMessage(lowBid:format(SimpleDKP_MinBid), "WHISPER", nil, sender)
+        return
+      end
+      for i, v in ipairs(bids) do -- check if that player has already bid
+        if sender == v.name then
+          SendChatMessage(oldBidDetectd:format(v.bid, bid), "WHISPER", nil, sender)
+          v.bid = bid
+          return
+        end
+      end
+      -- he hasn't bid yet, so create a new entry in bids
+      table.insert(bids, {bid = bid, name = sender})
+      SendChatMessage(bidPlaced:format(bid), "WHISPER", nil, sender)
+    end
   end
 
+  local frame = CreateFrame("Frame")
+  frame:RegisterEvent("CHAT_MSG_WHISPER")
+  frame:SetScript("onEvent", onEvent)
+end
+
+SLASH_SimpleDKP1 = "/simpledkp"
+SLASH_SimpleDKP2 = "/sdkp"
+
+do
+  local setChannel = "Channel is now \"%s\""
+  local setTime = "Time is now %s"
+  local setMinBid = "Lowest bid is now %s"
+  local addedToACL = "Added %s player(s) to the ACL"
+  local removedFromACL = "Removed %s player(s) from the ACL"
+  local currChannel = "Channel is currently set to \"%s\""
+  local currTime = "Time is currently set to %s"
+  local currMinBid = "Lowest ibd is currently set to %s"
+  local ACL = "Access Control List:"
+
+  local function addToACL(...) -- adds multiple players to the ACL
+    for i = 1, select("#", ...) do -- iterate over the arguments
+      SimpleDKP_ACL[select(i, ...)] = true  -- and add all players
+    end
+    print(addedToACL:format(select("#", ...)))  -- print an info message
+  end
+
+  local function removeFromACL(...)  -- removes player(s) from the ACL
+    for i = 1, select("#", ...) do -- iterate over the vararg
+      SimpleDKP_ACL[select(i, ...)] = nil -- remove the players from the ACL
+    end
+    print(removedFromACL:format(select("#", ...))) -- print an info message
+  end
+
+  SlashCmdList["SimpleDKP"] = function(msg)
+    local cmd, arg = string.split(" ", msg) -- split the string
+    cmd = cmd:lower() -- the command should not be case-sensitive
+
+    if cmd == "start" and arg then -- /sdkp start item
+      startAuction(msg:match("^start%s+(.+)")) -- extract the item link
+    elseif cmd == "stop" -- /sdkp stop
+      cancelAuction()
+    elseif cmd == "channel" then -- /skdp channel arg
+      if arg then -- a new channel was provided
+        SimpleDKP_Channel = arg:upper() -- set it to arg
+        print(setChannel:format(SimpleDKP_Channel))
+      else -- no channel was provided
+        print(currChannel:format(SimpleDKP_Channel)) -- print the current one
+      end
+    elseif cmd == "time" then -- /sdkp time arg
+      if arg and tonumber(arg) then -- arg is provided and it is a number
+        SimpleDKP_AuctionTime = tonumber(arg) -- set it
+        print(setTime:format(SimpleDKP_AuctionTime))
+      else -- arg was not provided or it wasn't a number
+        print(currTime:format(SimpleDKP_AuctionTime)) -- print error message
+      end
+    elseif cmd == "minbid" then
+      if arg and tonumber(arg) then -- arg is set and a number
+        SimpleDKP_MinBid = tonumber(arg) -- set the option
+        print(setMinBid:format(SimpleDKP_MinBid))
+      else -- arg is not set or not a number
+        print(currMinBid:format(SimpleDKP_MinBid)) -- print error message
+      end
+    elseif cmd == "acl" then -- /skdp acl add/remove player1, player2, ...
+      if not arg then -- add/remove not passed
+        print(ACL)
+        for k, v in pairs(SimpleDKP_ACL) do -- loop over the ACL
+          print(k) -- print all entries
+        end
+      elseif arg:lower() == "add" then -- /skdp add player1, player2, ...
+        -- split the string and pass all players to our helper function
+        addToACL(select(3, string.split(" ", msg)))
+      elseif arg:lower() == "remove" then -- /sdkp remove player1, player2, ...
+        removeFromACL(select(3, string.split(" ", msg))) -- split & remove
+      end
+    end
+
+  end
 
 end
+
+
+
 
 
 

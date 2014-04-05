@@ -38,22 +38,33 @@ module.exports = function(grunt) {
           src: '**',
           dest: ADDONS_DIR + 'SimpleTimingLib'
         }]
+      },
+      SimpleDKP: {
+        files: [{
+          cwd: 'SimpleDKP',
+          src: '**',
+          dest: ADDONS_DIR + 'SimpleDKP'
+        }]
       }
 
     },
 
     watch: {
       HelloWorld: {
-        files: 'HelloWorld/**/*.*',
+        files: 'HelloWorld/**/*',
         tasks: ['sync:HelloWorld']
       },
       ChatlinkTooltips: {
-        files: 'ChatlinkTooltips/**/*.*',
+        files: 'ChatlinkTooltips/**/*',
         tasks: ['sync:ChatlinkTooltips']
       },
       SimpleTimingLib: {
-        files: 'SimpleTimingLib/**/*.*',
+        files: 'SimpleTimingLib/**/*',
         tasks: ['sync:SimpleTimingLib']
+      },
+      SimpleDKP: {
+        files: 'SimpleDKP/**/*',
+        tasks: ['sync:SimpleDKP']
       }
     }
 
