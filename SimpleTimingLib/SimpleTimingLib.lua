@@ -1,6 +1,6 @@
 local tasks = {}
 
-function SimpleTimingLIb_Schedule(time, func, ...)
+function SimpleTimingLib_Schedule(time, func, ...)
   local t = {...}
   t.func = func
   t.time = GetTime() + time
@@ -20,7 +20,7 @@ end
 local frame = CreateFrame("Frame")
 frame:SetScript("OnUpdate", onUpdate)
 
-function SimpleTimingLIb_Unschedule(func, ...)
+function SimpleTimingLib_Unschedule(func, ...)
   for i = #tasks, 1, -1 do
     local val = tasks[i]
     if val.func == func then

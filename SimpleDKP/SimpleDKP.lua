@@ -2,6 +2,8 @@ local currentItem
 local bids = {}
 local prefix = "[SimpleDKP]"  -- prefix for chat messages
 
+-- SimpleTimingLib_Schedule(8, print, "working")
+
 -- default values for saved variables/options
 SimpleDKP_Channel = "GUILD" -- the chat channel to use
 SimpleDKP_AuctionTime = 30  -- the time (in seconds) for an auction
@@ -57,6 +59,7 @@ do
 
   function endAuction()
     table.sort(bids, sortBids)
+
     if #bids == 0 then -- case 1: no bid at all
       SendChatMessage(noBids:format(currentItem), SimpleDKP_Channel)
     elseif #bids == 1 then -- case 2: one bid; the bidder pays the minimun bid
@@ -73,7 +76,7 @@ do
         if bids[i].bid ~= bids[1].bid then -- found a player who bid less --> break
           break
         else -- append the players name to the string
-          if bids[i + 2] and bids[i + 2].bid = bids[i].bid then
+          if bids[i + 2] and bids[i + 2].bid == bids[1].bid then
             str = str .. bids[i].name .. ", " -- use a comma if this is not the last
           else
             str = str .. bids[i].name .. " and " -- this is the last player
@@ -84,6 +87,7 @@ do
       -- string that is too long
       SendChatMessage(pleaseRoll:format(str, bids[1].bid, currentItem), SimpleDKP_Channel)
     end
+
     currentItem = nil -- set currentItem to nil as there is no longer an ongonging auction
     table.wipe(bids) -- clear the table that holds the bids
   end
@@ -111,11 +115,24 @@ do
       -- he hasn't bid yet, so create a new entry in bids
       table.insert(bids, {bid = bid, name = sender})
       SendChatMessage(bidPlaced:format(bid), "WHISPER", nil, sender)
+    elseif SimpleDKP_ACL[sender] then
+      -- not a whisper or a whisper that is not a bid
+      -- and the sender has the permission to send commands
+      local cmd, arg = msg:match("^!(%w+)%s*(.*)")
+      if cmd and cmd:lower() == "auction" and arg then
+        startAuction(arg, sender)
+      elseif cmd and cmd:lower() == "cancel" then
+        cancelAuction(sender)
+      end
     end
   end
 
   local frame = CreateFrame("Frame")
   frame:RegisterEvent("CHAT_MSG_WHISPER")
+  frame:RegisterEvent("CHAT_MSG_RAID")
+  frame:RegisterEvent("CHAT_MSG_RAID_LEADER")
+  frame:RegisterEvent("CHAT_MSG_GUILD")
+  frame:RegisterEvent("CHAT_MSG_OFFICER")
   frame:SetScript("onEvent", onEvent)
 end
 
@@ -153,7 +170,7 @@ do
 
     if cmd == "start" and arg then -- /sdkp start item
       startAuction(msg:match("^start%s+(.+)")) -- extract the item link
-    elseif cmd == "stop" -- /sdkp stop
+    elseif cmd == "stop" then -- /sdkp stop
       cancelAuction()
     elseif cmd == "channel" then -- /skdp channel arg
       if arg then -- a new channel was provided
@@ -169,7 +186,7 @@ do
       else -- arg was not provided or it wasn't a number
         print(currTime:format(SimpleDKP_AuctionTime)) -- print error message
       end
-    elseif cmd == "minbid" then
+    elseif cmd == "minbid" then -- /sdkp minbid arg
       if arg and tonumber(arg) then -- arg is set and a number
         SimpleDKP_MinBid = tonumber(arg) -- set the option
         print(setMinBid:format(SimpleDKP_MinBid))
@@ -194,6 +211,31 @@ do
 
 end
 
+do
+  local cancelled = "Auction cancelled by %s"
+  function cancelAuction(sender)
+    currentItem = nil
+    table.wipe(bids)
+    SimpleTimingLib_Unschedule(SendChatMessage)
+    SimpleTimingLib_Unschedule(endAuction)
+    SendChatMessage(cancelled:format(sender or UnitName("player")), SimpleDKP_Channel)
+  end
+end
+
+local function filterIncoming(self, event, ...)
+  local msg = ... -- get the message from the vararg
+  -- return true if threre is an ongoing auction and the whisper is a number
+  -- followed by all event handler arguments
+  return currentItem and tonumber(msg), ...
+end
+
+local function filterOutgoing(self, event, ...)
+  local msg = ... -- extract the message
+  return msg:sub(0, prefix:len()) == prefix, ...
+end
+
+ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER", filterIncoming)
+ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER_INFORM", filterOutgoing)
 
 
 
