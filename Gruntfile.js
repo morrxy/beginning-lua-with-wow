@@ -16,7 +16,6 @@ module.exports = function(grunt) {
     ADDONS_DIR = ADDONS_DIR_MAC;
   }
 
-
   // dynamic config sync and watch's targets for every dir except for node_modules
   grunt.registerTask('config', 'config sync and watch', function() {
 
@@ -39,7 +38,7 @@ module.exports = function(grunt) {
       watch_tasks[dir] = {
         files: dir + '/**/*',
         // tasks: 'sync:' + dir
-        tasks: 'syncEach'
+        tasks: 'synceach'
       };
       grunt.config.set('watch', watch_tasks);
 
@@ -50,9 +49,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-sync');
   grunt.loadNpmTasks('grunt-contrib-watch');
 
-  grunt.registerTask('syncEach', ['config', 'sync']);
-  grunt.registerTask('watchEach', ['config', 'watch']);
-  grunt.registerTask('default', ['syncEach']);
+  grunt.registerTask('synceach', ['config', 'sync']);
+  grunt.registerTask('watcheach', ['config', 'watch']);
+  grunt.registerTask('default', ['watcheach']);
 
 };
 
