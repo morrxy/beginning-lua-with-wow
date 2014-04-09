@@ -1,0 +1,1 @@
+POKER_BROWSER_TITLE = "Texas Hold'em Table Browser"

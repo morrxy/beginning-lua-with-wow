@@ -21,5 +21,41 @@
         <AbsInset left="11" right="12" top="12" bottom="11"/>
       </BackgroundInsets>
     </Backdrop>
+    <Layers>
+      <Layer level="ARTWORK">
+        <Texture name="$parentTitle" file="Interface\DialogFrame\UI-DialogBox-Header">
+          <Size>
+            <AbsDimension x="375" y="64" />
+          </Size>
+          <Anchors>
+            <Anchor point="TOP">
+              <Offset>
+                <AbsDimension x="0" y="12"/>
+              </Offset>
+            </Anchor>
+          </Anchors>
+        </Texture>
+        <FontString inherits="GameFontNormal" text="POKER_BROWSER_TITLE">
+          <Anchors>
+            <Anchor point="TOP" relativeTo="$parentTitle">
+              <Offset>
+                <AbsDimension x="0" y="-14"/>
+              </Offset>
+            </Anchor>
+          </Anchors>
+        </FontString>
+      </Layer>
+    </Layers>
+    <Scripts>
+      <Onload>
+        self:RegisterForDrag("LeftButton")
+      </Onload>
+      <OnDragStart>
+        self:StartMoving()
+      </OnDragStart>
+      <OnDragStop>
+        self:StopMovingOrSizing()
+      </OnDragStop>
+    </Scripts>
   </Frame>
 </Ui>
