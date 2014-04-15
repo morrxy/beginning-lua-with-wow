@@ -1,6 +1,6 @@
 ## Interface: 50400
 ## Title: Texas Hold'em
-## Texas Hold'em poker game
+## Notes: Texas Hold'em poker game
 localization.en.lua
 TableBrowser.xml
 TableBrowser.lua

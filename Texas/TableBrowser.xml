@@ -1,4 +1,73 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
+  <Button name="Poker_TableBrowserEntry" hidden="true" virtual="true">
+    <Size>
+      <AbsDimension x="328" y="24"/>
+    </Size>
+    <Layers>
+      <Layer>
+        <FontString name="$parentName" justifyH="LEFT" inherits="GameFontNormalSmall">
+          <Size>
+            <AbsDimension x="138" y="24"/>
+          </Size>
+          <Anchors>
+            <Anchor point="LEFT">
+              <Offset>
+                <AbsDimension x="4" y="0"/>
+              </Offset>
+            </Anchor>
+          </Anchors>
+        </FontString>
+        <FontString name="$parentHost" justifyH="LEFT" inherits="GameFontNormalSmall">
+          <Size>
+            <AbsDimension x="80" y="24"/>
+          </Size>
+          <Anchors>
+            <Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$parentName"/>
+          </Anchors>
+        </FontString>
+        <FontString name="$parentPlayers" justifyH="LEFT" inherits="GameFontNormalSmall">
+          <Size>
+            <AbsDimension x="50" y="24"/>
+          </Size>
+          <Anchors>
+            <Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$parentHost"/>
+          </Anchors>
+        </FontString>
+        <FontString name="$parentBlinds" justifyH="LEFT" inherits="GameFontNormalSmall">
+          <Size>
+            <AbsDimension x="60" y="24"/>
+          </Size>
+          <Anchors>
+            <Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$parentPlayers"/>
+          </Anchors>
+        </FontString>
+      </Layer>
+    </Layers>
+    <Scripts>
+      <Onload>
+        getglobal(self:GetName().."BG"):Hide()
+      </Onload>
+      <OnClick>
+        if not Poker_TableBrowser.IsSelected(self:GetID()) then
+          Poker_TableBrowser.SelectEntry(self:GetID())
+        end
+      </OnClick>
+      <OnDoubleClick>
+        Poker_TableBrowser.JoinSelectedTable()
+      </OnDoubleClick>
+      <OnEnter>
+        getglobal(self:GetName().."BG"):Show()
+      </OnEnter>
+      <OnLeave>
+        if not Poker_TableBrowser.IsSelected(self:GetID()) then
+          getglobal(self:GetName().."BG"):Hide()
+        end
+      </OnLeave>
+    </Scripts>
+    <NormalTexture name="$parentBG">
+      <Color r="0" g="0" b="0.5" a="0.25"/>
+    </NormalTexture>
+  </Button>
   <Button name="Poker_TableBrowserHeader" virtual="true">
     <Scripts>
       <OnClick>
