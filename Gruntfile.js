@@ -4,9 +4,19 @@ module.exports = function(grunt) {
     // addon path of my mac
     var dir_mac = '/Applications/World of Warcraft/Interface/AddOns/';
     // addon path of my workpc
-    var dir_pc = 'm:\\World of Warcraft\\Interface\\AddOns\\';
+    var dir_pc = 'd:\\Program Files\\World of Warcraft\\Interface\\AddOns\\';
+    // addon path of linux
+    var dir_linux = '/media/data/Program Files/World of Warcraft/Interface/AddOns/';
+
     // choose addon path
-    var dir = (grunt.file.exists(dir_pc)) ? dir_pc : dir_mac;
+    var dir;
+    if (grunt.file.exists(dir_pc)) {
+      dir = dir_pc;
+    } else if (grunt.file.exists(dir_mac)) {
+      dir = dir_mac;
+    } else if (grunt.file.exists(dir_linux)) {
+      dir = dir_linux;
+    }
 
     return dir;
   })();
@@ -53,6 +63,6 @@ module.exports = function(grunt) {
 
   grunt.registerTask('synceach', ['config_sync', 'sync']);
   grunt.registerTask('watcheach', ['config_watch', 'watch']);
-  grunt.registerTask('default', ['watcheach']);
+  grunt.registerTask('default', ['synceach', 'watcheach']);
 
 };
