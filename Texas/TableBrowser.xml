@@ -71,8 +71,8 @@
   <Button name="Poker_TableBrowserHeader" virtual="true">
     <Scripts>
       <OnClick>
-        <!-- Poker_TableBrowser.sortTables(this:GetID()) this is a bug line,
-        this should be self as next line -->
+        <!-- this is a bug line, 'this:' should be 'self:' -->
+        <!-- Poker_TableBrowser.sortTables(this:GetID()) -->
         Poker_TableBrowser.sortTables(self:GetID())
         PlaySound("igMainMenuOptionCheckBoxOn")
       </OnClick>

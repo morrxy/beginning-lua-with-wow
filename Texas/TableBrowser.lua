@@ -58,7 +58,6 @@ do
   local currOrder = "asc"
 
   function Poker_TableBrowser.sortTables(id)
-    print(id)
     if currSort == id then
       if currOrder == "desc" then
         currOrder = "asc"
