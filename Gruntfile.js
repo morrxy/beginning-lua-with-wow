@@ -21,6 +21,11 @@ module.exports = function(grunt) {
     return dir;
   })();
 
+  if (!ADDONS_DIR) {
+    grunt.log.writeln("sync's target dir not found.");
+    return;
+  }
+
   grunt.loadNpmTasks('grunt-sync');
   grunt.loadNpmTasks('grunt-contrib-watch');
 
