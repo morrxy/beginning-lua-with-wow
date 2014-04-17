@@ -4,7 +4,7 @@ module.exports = function(grunt) {
     // addon path of my mac
     var dir_mac = '/Applications/World of Warcraft/Interface/AddOns/';
     // addon path of my workpc
-    var dir_pc = 'd:\\Program Files\\World of Warcraft\\Interface\\AddOns\\';
+    var dir_pc = 'd:\\Program Files\\World of Warcraft\\Interface\\AddOnsx\\';
     // addon path of linux
     var dir_linux = '/media/data/Program Files/World of Warcraft/Interface/AddOns/';
 
@@ -22,8 +22,8 @@ module.exports = function(grunt) {
   })();
 
   if (!ADDONS_DIR) {
-    grunt.log.writeln("sync's target dir not found.");
-    return;
+    // grunt.log.writeln("sync's target dir not found.");
+    grunt.fail.warn("sync's target dir not found.");
   }
 
   grunt.loadNpmTasks('grunt-sync');
