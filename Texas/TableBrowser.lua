@@ -54,6 +54,7 @@ end
 Poker_TableBrowser.Update()
 
 do
+
   local currSort = 1
   local currOrder = "asc"
 
@@ -82,6 +83,32 @@ do
 
 end
 
+do
 
+  local selection = nil
+
+  function Poker_TableBrowser.JoinSelectedTable()
+    if not selection then
+      return
+    end
+    print(string.format("Joining %s's table %s", selection[2], selection[1]))
+  end
+
+  function Poker_TableBrowser.SelectEntry(id)
+    if selection then
+      for i = 1, MAX_TABLES do
+        getglobal("Poker_TableBrowserTableListEntry"..i.."BG"):Hide()
+      end
+      selection.isSelected = nil
+    end
+    selection = Poker_TableBrowser.Tables[id]
+    selection.isSelected = true
+  end
+
+  function Poker_TableBrowser.IsSelected(id)
+    return Poker_TableBrowser.Tables[id] == selection
+  end
+
+end
 
 

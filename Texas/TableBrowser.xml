@@ -234,6 +234,23 @@
               <Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$parentHeaderPlayers"/>
             </Anchors>
           </Button>
+          <ScrolFrame name="$parentScrollFrame" inherits="FauxScrollFrameTemplate">
+            <Size>
+              <AbsDimension x="16" y="216"/>
+            </Size>
+            <Anchors>
+              <Anchor point="TOPRIGHT">
+                <Offset>
+                  <AbsDimension x="-27" y="-5"/>
+                </Offset>
+              </Anchor>
+            </Anchors>
+            <Scripts>
+              <OnVerticalScroll>
+                FauxScrollFrame_OnVerticalScroll(self, offset, 24, PokerTableBrowser.Update)
+              </OnVerticalScroll>
+            </Scripts>
+          </ScrolFrame>
         </Frames>
       </Frame>
     </Frames>
