@@ -20,8 +20,16 @@ end
 Poker_TableBrowser.Tables = {}  --  all available poker talbes
 
 function Poker_TableBrowser.Update()
+  print("update1")
+  FauxScrollFrame_Update(
+    Poker_TableBrowserTableListScrollFrame, #Poker_TableBrowser.Tables, MAX_TABLES, 24,
+    "Poker_TableBrowserTableListEntry", 328, 344,
+    Poker_TableBrowserTableListHeaderBlinds, 60, 76
+  )
+  print("update2")
   for i = 1, MAX_TABLES do
-    local entry = Poker_TableBrowser.Tables[i]
+    print(i + Poker_TableBrowserTableListScrollFrame.offset)
+    local entry = Poker_TableBrowser.Tables[i + Poker_TableBrowserTableListScrollFrame.offset]
     local frame = getglobal("Poker_TableBrowserTableListEntry"..i)
     if entry then
       frame:Show()
@@ -40,10 +48,10 @@ function Poker_TableBrowser.Update()
   end
 end
 
-for i = 1, MAX_TABLES do
+for i = 1, MAX_TABLES * 2 do
   table.insert(Poker_TableBrowser.Tables, {
     "Test Table "..i,
-    "Host "..(MAX_TABLES - i),
+    "Host "..(MAX_TABLES * 2 - i),
     i % 3 + 1,  -- just dummy values
     10,
     i * 10,
@@ -101,12 +109,12 @@ do
       end
       selection.isSelected = nil
     end
-    selection = Poker_TableBrowser.Tables[id]
+    selection = Poker_TableBrowser.Tables[id + Poker_TableBrowserTableListScrollFrame.offset]
     selection.isSelected = true
   end
 
   function Poker_TableBrowser.IsSelected(id)
-    return Poker_TableBrowser.Tables[id] == selection
+    return Poker_TableBrowser.Tables[id + Poker_TableBrowserTableListScrollFrame.offset] == selection
   end
 
 end

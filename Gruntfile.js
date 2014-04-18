@@ -4,7 +4,7 @@ module.exports = function(grunt) {
     // addon path of my mac
     var dir_mac = '/Applications/World of Warcraft/Interface/AddOns/';
     // addon path of my workpc
-    var dir_pc = 'd:\\Program Files\\World of Warcraft\\Interface\\AddOnsx\\';
+    var dir_pc = 'd:\\Program Files\\World of Warcraft\\Interface\\AddOns\\';
     // addon path of linux
     var dir_linux = '/media/data/Program Files/World of Warcraft/Interface/AddOns/';
 
